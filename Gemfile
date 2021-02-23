@@ -33,6 +33,9 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Use will_paginate for pagination
+gem 'will_paginate', '~> 3.3.0'
+
 gem 'devise'
 gem 'simple_form'
 
