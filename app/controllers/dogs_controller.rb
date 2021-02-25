@@ -1,5 +1,6 @@
 class DogsController < ApplicationController
   before_action :set_dog, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
 
   # GET /dogs
   # GET /dogs.json
@@ -19,6 +20,12 @@ class DogsController < ApplicationController
 
   # GET /dogs/1/edit
   def edit
+    if !owns_dog
+      respond_to do |format|
+        format.html { redirect_to dogs_url, notice: 'Forbidden' }
+        format.json { render :show, status: 403, location: @dog }
+      end
+    end
   end
 
   # POST /dogs
@@ -58,10 +65,17 @@ class DogsController < ApplicationController
   # DELETE /dogs/1
   # DELETE /dogs/1.json
   def destroy
-    @dog.destroy
-    respond_to do |format|
-      format.html { redirect_to dogs_url, notice: 'Dog was successfully destroyed.' }
-      format.json { head :no_content }
+    if !owns_dog
+      respond_to do |format|
+        format.html { redirect_to dogs_url, notice: 'Forbidden' }
+        format.json { render :show, status: 403, location: @dog }
+      end
+    else
+      @dog.destroy
+      respond_to do |format|
+        format.html { redirect_to dogs_url, notice: 'Dog was successfully destroyed.' }
+        format.json { head :no_content }
+      end
     end
   end
 
@@ -74,5 +88,9 @@ class DogsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the allow list through.
     def dog_params
       params.require(:dog).permit(:name, :description, :images)
+    end
+
+    def owns_dog
+      return current_user && current_user.id == @dog.user.id
     end
 end
