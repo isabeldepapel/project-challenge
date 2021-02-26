@@ -1,8 +1,14 @@
 require 'rails_helper'
 
 describe 'Dog resource', type: :feature do
+  before do
+    @user = create(:user)
+    sign_in @user
+  end
+
   it 'can create a profile' do
-    visit new_dog_path
+    # user = create(:user)
+    visit new_user_dog_path(@user)
     fill_in 'Name', with: 'Speck'
     fill_in 'Description', with: 'Just a dog'
     attach_file 'Image', 'spec/fixtures/images/speck.jpg'

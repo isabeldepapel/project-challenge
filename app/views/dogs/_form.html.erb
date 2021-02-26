@@ -1,4 +1,12 @@
-<%= simple_form_for @dog do |f| %>
+<%
+  if params[:action] == "new"
+    url = user_dogs_path(current_user.id)
+  else
+    url = dog_path
+  end
+%>
+
+<%= simple_form_for @dog, url: url do |f| %>
   <%= f.input :name %>
   <%= f.input :description, as: :text %>
   <%= f.input :image, as: :file %>

@@ -17,7 +17,7 @@ dogs = [
   },
   {
     name: 'Jax',
-    description: '',
+    description: ''
   },
   {
     name: 'Jiro',
@@ -49,9 +49,65 @@ dogs = [
   },
 ]
 
-dogs.each do |dog|
-  dog = Dog.find_or_create_by(name: dog[:name], description: dog[:description])
-  directory_name = File.join(Rails.root, 'db', 'seed', "#{dog[:name].downcase}", "*")
+users = [
+  {
+    name: 'Ian',
+    email: 'ian@gmail.com'
+  },
+  {
+    name: 'Kat',
+    email: 'kat@gmail.com'
+  },
+  {
+    name: 'Chloe',
+    email: 'chloe@gmail.com'
+  },
+  {
+    name: 'Pip',
+    email: 'pip@gmail.com'
+  },
+  {
+    name: 'Stanley',
+    email: 'stanley@gmail.com'
+  },
+  {
+    name: 'Dodo',
+    email: 'dodo@gmail.com'
+  },
+  {
+    name: 'Mel',
+    email: 'mel@gmail.com'
+  },
+  {
+    name: 'Dell',
+    email: 'dell@gmail.com'
+  },
+  {
+    name: 'Rachel',
+    email: 'rachel@gmail.com'
+  },
+  {
+    name: 'Ross',
+    email: 'ross@gmail.com'
+  }
+]
+
+users.length.times do |i|
+  user = users[i]
+  date = DateTime.new(20201, 2, 23, 2, 2 , 2)
+
+  user = User.create(
+    name: user[:name],
+    email: user[:email],
+    created_at: date,
+    updated_at:date,
+    password: 'password'
+  )
+  user.save!
+
+  dog_info = dogs[i]
+  dog = user.dogs.create(name: dog_info[:name], description: dog_info[:description])
+  directory_name = File.join(Rails.root, 'db', 'seed', "#{dog_info[:name].downcase}", "*")
 
   Dir.glob(directory_name).each do |filename|
     if !dog.images.any?{|i| i.filename == filename}

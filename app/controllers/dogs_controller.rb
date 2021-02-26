@@ -24,7 +24,7 @@ class DogsController < ApplicationController
   # POST /dogs
   # POST /dogs.json
   def create
-    @dog = Dog.new(dog_params)
+    @dog = Dog.new(dog_params.merge(user_id: current_user.id))
 
     respond_to do |format|
       if @dog.save
